@@ -1,0 +1,64 @@
+#+PROPERTY: header-args :tangle "feed.el" :noweb yes
+
+I get a lot of my news, and updates via Atom/RSS feeds.  If I'm going to
+browse them in emacs I use elfeed.
+
+#+name: header
+#+begin_src emacs-lisp :exports none
+;;; elfeed -- Just my elfeed config.  -*- lexical-binding: t; -*-
+;;; Commentary:
+;;; Nothing yet.
+
+;;; Code:
+#+end_src
+
+#+name: footer
+#+begin_src emacs-lisp :exports none
+(provide 'feed)
+;;; feed.el ends here
+#+end_src
+
+#+name: feed-src
+#+begin_src emacs-lisp :exports code
+
+(use-package elfeed
+  :defer t
+  :bind
+  (("C-c F" . elfeed)))
+
+(use-package elfeed-org
+  :after (elfeed)
+  :config
+  (elfeed-org)
+  (setq rmh-elfeed-org-files (list "~/.emacs.d/extra/elfeed.org")))
+
+(use-package elfeed-tube
+  :after (elfeed)
+  :config
+  (elfeed-tube-setup)
+  :bind (:map elfeed-show-mode-map
+              ("F" . elfeed-tube-fetch)
+              ([remap save-buffer] . elfeed-tube-save)
+              :map elfeed-search-mode-map
+              ("F" . elfeed-tube-fetch)
+              ([remap save-buffer] . elfeed-tube-save)))
+
+(use-package mpv
+  :ensure (:host github :repo "kljohann/mpv.el"))
+
+(use-package elfeed-tube-mpv
+  :after (elfeed-tube mpv)
+  :bind (:map elfeed-show-mode-map
+              ("C-c C-f" . elfeed-tube-mpv-follow-mode)
+              ("C-c C-w" . elfeed-tube-mpv-where)))
+
+(use-package elfeed-goodies
+  :after (elfeed)
+  :config
+  (elfeed-goodies/setup))
+
+<<footer>>
+#+end_src
+
+#+RESULTS: feed-src
+: feed

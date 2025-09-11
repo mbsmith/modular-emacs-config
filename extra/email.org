@@ -1,0 +1,142 @@
+#+PROPERTY: header-args :tangle email.el
+
+Incoming email is handled by [[https://notmuchmail.org][notmuch]].  Outgoing is via [[https://github.com/marlam/msmtp][msmtp]]
+
+This is a pretty simple implementation without a lot of search queries, and
+list handling.  As I get more comfortable with using emacs as an email client
+I'll try to get fancier.
+
+#+BEGIN_SRC emacs-lisp
+;; Email/notmuch settings  -*- lexical-binding: t; -*-
+(use-package notmuch
+  :init
+  (autoload 'notmuch "notmuch" "notmuch mail" t)
+  :config
+  (define-key notmuch-show-mode-map "d"
+              (lambda ()
+                "toggle deleted tag for message"
+                (interactive)
+                (if (member "deleted" (notmuch-show-get-tags))
+                    (notmuch-show-tag (list "-deleted"))
+                  (notmuch-show-tag (list "+deleted")))))
+
+  (define-key notmuch-search-mode-map "d"
+              (lambda ()
+                "toggle deleted tag for message"
+                (interactive)
+                (if (member "deleted" (notmuch-search-get-tags))
+                    (notmuch-search-tag (list "-deleted"))
+                  (notmuch-search-tag (list "+deleted")))))
+
+  (define-key notmuch-tree-mode-map "d"
+              (lambda ()
+                "toggle deleted tag for message"
+                (interactive)
+                (if (member "deleted" (notmuch-tree-get-tags))
+                    (notmuch-tree-tag (list "-deleted"))
+                  (notmuch-tree-tag (list "+deleted"))))))
+  
+
+;; Saved searches
+(setq notmuch-saved-searches '((:name "cheapbsd"
+                                      :query "tag:inbox and tag:cheapbsd"
+                                      :count-query "tag:inbox and tag:cheapbsd and tag:unread")
+                               (:name "icloud"
+                                      :query "tag:inbox and tag:icloud"
+                                      :count-query "tag:inbox and tag:icloud and tag:unread")
+                               (:name "sdf"
+                                      :query "tag:inbox and tag:sdf"
+                                      :count-query "tag:inbox and tag:sdf and tag:unread")))
+
+(setq mml-secure-openpgp-sign-with-sender t)
+
+;; Sign messages by default.
+(add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
+
+;; Use msmtp
+(setq send-mail-function 'sendmail-send-it
+      sendmail-program "msmtp"
+      mail-specify-envelope-from t
+      message-sendmail-envelope-from 'header
+      mail-envelope-from 'header)
+
+(defun message-recipients ()
+  "Return a list of all recipients in the message, looking at TO, CC and BCC.
+
+Each recipient is in the format of `mail-extract-address-components'."
+  (mapcan (lambda (header)
+            (let ((header-value (message-fetch-field header)))
+              (and
+               header-value
+               (mail-extract-address-components header-value t))))
+          '("To" "Cc" "Bcc")))
+
+(defun message-all-epg-keys-available-p ()
+  "Return non-nil if the pgp keyring has a public key for each recipient."
+  (require 'epa)
+  (let ((context (epg-make-context epa-protocol)))
+    (catch 'break
+      (dolist (recipient (message-recipients))
+        (let ((recipient-email (cadr recipient)))
+          (when (and recipient-email (not (epg-list-keys context recipient-email)))
+            (throw 'break nil))))
+      t)))
+
+(defun message-sign-encrypt-if-all-keys-available ()
+  "Add MML tag to encrypt message when there is a key for each recipient.
+
+Consider adding this function to `message-send-hook' to
+systematically send encrypted emails when possible."
+  (when (message-all-epg-keys-available-p)
+    (mml-secure-message-sign-encrypt)))
+
+(add-hook 'message-send-hook #'message-sign-encrypt-if-all-keys-available)
+
+(setq notmuch-crypto-process-mime t)
+
+(defvar notmuch-hello-refresh-count 0)
+
+(defun notmuch-hello-refresh-status-message ()
+  (let* ((new-count
+          (string-to-number
+           (car (process-lines notmuch-command "count"))))
+         (diff-count (- new-count notmuch-hello-refresh-count)))
+    (cond
+     ((= notmuch-hello-refresh-count 0)
+      (message "You have %s messages."
+               (notmuch-hello-nice-number new-count)))
+     ((> diff-count 0)
+      (message "You have %s more messages since last refresh."
+               (notmuch-hello-nice-number diff-count)))
+     ((< diff-count 0)
+      (message "You have %s fewer messages since last refresh."
+               (notmuch-hello-nice-number (- diff-count)))))
+    (setq notmuch-hello-refresh-count new-count)))
+
+(add-hook 'notmuch-hello-refresh-hook 'notmuch-hello-refresh-status-message)
+
+(defun color-inbox-if-unread () (interactive)
+       (save-excursion
+         (goto-char (point-min))
+         (let ((cnt (car (process-lines "notmuch" "count" "tag:inbox and tag:unread"))))
+           (when (> (string-to-number cnt) 0)
+             (save-excursion
+               (when (search-forward "inbox" (point-max) t)
+                 (let* ((overlays (overlays-in (match-beginning 0) (match-end 0)))
+                        (overlay (car overlays)))
+                   (when overlay
+                     (overlay-put overlay 'face '((:inherit bold) (:foreground "green")))))))))))
+(add-hook 'notmuch-hello-refresh-hook 'color-inbox-if-unread)
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(notmuch-search-oldest-first nil))
+(custom-set-faces)
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+#+end_src

@@ -1,0 +1,51 @@
+#+PROPERTY: header-args :tangle "social.el" :exports code
+
+* Mastodon, and other tidbits
+
+#+name: header
+#+begin_src emacs-lisp :exports none
+;;; social -- Provides social features -*- lexical-binding: t; -*-
+
+;;; Commentary:
+;;; Only provides Mastodon, and discord presence currently.
+
+;;; Code:
+#+end_src
+
+#+RESULTS: header
+
+** Mastodon
+
+Just a little package for browsing mastodon.  I don't use it much, but
+it's deferred and doesn't take much space.
+
+#+begin_src emacs-lisp
+<<header>>
+
+(use-package mastodon
+  :defer t
+  :config
+  (setq mastodon-instance-url "https://mastodon.social"
+        mastodon-active-user "xulfer"))
+
+
+#+end_src
+
+** Ugh... Discord
+
+Not a big discord user, but when I do I might as well flash the editor.
+
+#+begin_src emacs-lisp
+;; Well just in case there is an urge to hop on discord... :(
+(use-package elcord
+  :config
+  (elcord-mode))
+#+end_src
+
+#+name: footer
+#+begin_src emacs-lisp :exports none
+;;; social.el ends here
+
+(provide 'social)
+
+#+end_src
