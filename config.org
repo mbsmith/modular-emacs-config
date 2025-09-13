@@ -1270,13 +1270,15 @@ the package.
   :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
          (c-ts-mode . lsp-deferred)
          (clojure-ts-mode . lsp-deferred)
+         (elixir-ts-mode . lsp-deferred)
          (fennel-mode . lsp-deferred)
-         (gleam-ts-mode . lsp-deferred)
          (rust-ts-mode . lsp-deferred)
          (slint-mode . lsp-deferred)
          ;; if you want which-key integration
          (lsp-mode . lsp-enable-which-key-integration))
-  :commands lsp-deferred)
+  :commands lsp-deferred
+  :config
+  (setq lsp-elixir-server-command '("elixir-ls")))
 
 ;; optionally
 (use-package lsp-ui :commands lsp-ui-mode)
@@ -1341,14 +1343,13 @@ bother with an explanation on each.
   :ensure t
   :defer t)
 
+(use-package inf-elixir
+  :defer t)
+
 ;; Fennel
 (use-package fennel-mode
   :config
   (add-to-list 'auto-mode-alist '("\\.fnl\\'" . fennel-mode)))
-
-;; Gleam
-(use-package gleam-ts-mode
-  :mode (rx ".gleam" eos))
 
 ;; Go
 (use-package go-mode
@@ -1514,6 +1515,8 @@ be tangled.  They're here for reference if need be, however.
 #+end_src
 
 #+begin_src emacs-lisp :exports none
+(maybe-load-rel "custom.el")
+
 (provide 'init)
 ;;; init.el ends here
 
