@@ -1274,6 +1274,7 @@ the package.
          (fennel-mode . lsp-deferred)
          (rust-ts-mode . lsp-deferred)
          (slint-mode . lsp-deferred)
+         (zig-mode . lsp-deferred)
          ;; if you want which-key integration
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp-deferred
@@ -1327,6 +1328,11 @@ bother with an explanation on each.
   :defer t
   :config
   (add-to-list 'auto-mode-alist '("\\.slint\\'" . slint-mode)))
+
+(use-package zig-mode
+  :defer t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.\\(zig\\|zon\\)\\'" . zig-mode)))
 
 (use-package rainbow-mode
   :commands (rainbow-mode))
@@ -1476,6 +1482,9 @@ taking tool has.
                               "#+title: %<%Y-%m-%d>\n\n* Tasks\n\n* Notes"))))
 
   (org-roam-db-autosync-mode))
+
+(use-package orgmdb
+  :ensure t)
 
 (use-package org-roam-ui
   :after (org-roam)
