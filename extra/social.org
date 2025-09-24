@@ -31,17 +31,6 @@ it's deferred and doesn't take much space.
 
 #+end_src
 
-** Ugh... Discord
-
-Not a big discord user, but when I do I might as well flash the editor.
-
-#+begin_src emacs-lisp
-;; Well just in case there is an urge to hop on discord... :(
-(use-package elcord
-  :config
-  (elcord-mode))
-#+end_src
-
 #+name: footer
 #+begin_src emacs-lisp :exports none
 ;;; social.el ends here
