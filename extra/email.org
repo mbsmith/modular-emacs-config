@@ -1,12 +1,10 @@
-#+PROPERTY: header-args :tangle email.el
-
 Incoming email is handled by [[https://notmuchmail.org][notmuch]].  Outgoing is via [[https://github.com/marlam/msmtp][msmtp]]
 
 This is a pretty simple implementation without a lot of search queries, and
 list handling.  As I get more comfortable with using emacs as an email client
 I'll try to get fancier.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle "email.el"
 ;; Email/notmuch settings  -*- lexical-binding: t; -*-
 (use-package notmuch
   :init

@@ -1,25 +1,8 @@
-#+PROPERTY: header-args :tangle "feed.el" :noweb yes
-
 I get a lot of my news, and updates via Atom/RSS feeds.  If I'm going to
 browse them in emacs I use elfeed.
 
-#+name: header
-#+begin_src emacs-lisp :exports none
-;;; elfeed -- Just my elfeed config.  -*- lexical-binding: t; -*-
-;;; Commentary:
-;;; Nothing yet.
-
-;;; Code:
-#+end_src
-
-#+name: footer
-#+begin_src emacs-lisp :exports none
-(provide 'feed)
-;;; feed.el ends here
-#+end_src
-
 #+name: feed-src
-#+begin_src emacs-lisp :exports code
+#+begin_src emacs-lisp :tangle "feed.el" :exports code
 
 (use-package elfeed
   :defer t
@@ -56,9 +39,5 @@ browse them in emacs I use elfeed.
   :after (elfeed)
   :config
   (elfeed-goodies/setup))
-
-<<footer>>
 #+end_src
 
-#+RESULTS: feed-src
-: feed

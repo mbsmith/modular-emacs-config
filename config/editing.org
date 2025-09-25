@@ -1,0 +1,11 @@
+* Basic Editing
+
+The most crucial settings in the whole configuration.  Despite the look of my
+configuration I do *indeed* use it as an editor.
+
+#+begin_src emacs-lisp
+(setq initial-buffer-choice t) ;;*scratch*
+(setq-default standard-indent 2)
+(setq-default tab-width 2)
+(editorconfig-mode)
+#+end_src

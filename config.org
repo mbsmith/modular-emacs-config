@@ -7,19 +7,23 @@
 #+LATEX_HEADER: \lstset{breaklines=true, breakatwhitespace=true, basicstyle=\ttfamily\footnotesize, columns=fullflexible}
 
 #+begin_src emacs-lisp :exports none :tangle no
+;; This asks for a file which it uses to store the processed org
+;; data with the includes into.  It can be anything and can safely
+;; be deleted afterwards.  I think README.org is a good file to
+;; pick if using a repository.
 (defun tangle-literate-config ()
-  "Tangle all my literate configuration files."
+  "Tangle config files with proper include handling."
   (interactive)
-  (let ((org-confirm-babel-evaluate nil)
-        (files '("config.org"
-                 "extra/feed.org"
-                 "extra/email.org"
-                 "extra/social.org")))
-    (dolist (file files)
-      (when (file-exists-p file)
-        (message "Tangling %s..." (file-name-nondirectory file))
-        (org-babel-tangle-file file)))
-    (message "All configuration files tangled!")))
+  (let ((org-confirm-babel-evaluate nil))
+    ;; Create a temporary buffer with expanded includes
+    (with-temp-buffer
+      (insert-file-contents "config.org")
+      (org-mode)
+      ;; This expands all #+INCLUDE directives
+      (org-export-expand-include-keyword)
+      ;; Now tangle from this buffer which has everything in one place
+      (org-babel-tangle nil "init.el"))
+    (message "Configuration tangled!")))
 #+end_src
 
 #+BEGIN_SRC emacs-lisp :exports none
@@ -114,18 +118,6 @@ loading as a blank slate with only the scratch buffer open.
 ;; End:
 #+end_src
 
-* Basic Editing
-
-The most crucial settings in the whole configuration.  Despite the look of my
-configuration I do *indeed* use it as an editor.
-
-#+begin_src emacs-lisp
-(setq initial-buffer-choice t) ;;*scratch*
-(setq-default standard-indent 2)
-(setq-default tab-width 2)
-(editorconfig-mode)
-#+end_src
-
 * Package Management
 
 I am using [[https://github.com/progfolio/elpaca][Elpaca]] as my package manager.  I've found it to be quite quick, and easy to
@@ -200,6 +192,8 @@ features.
   (elpaca-use-package-mode)
   (setq use-package-always-ensure t))
 #+end_src
+
+#+INCLUDE: "config/editing.org" :minlevel 1
 
 * Garbage Collection
 
@@ -477,14 +471,6 @@ on a system by system basis.
 (maybe-load-rel "extra/social.el")
 ;;;
 #+end_src
-
-# For now I'm not using headers here and letting them be defined in the org files
-# themselves.
-#+INCLUDE: "extra/email.org" :minlevel 1
-
-#+INCLUDE: "extra/feed.org" :minlevel 1
-
-#+INCLUDE: "extra/social.org" :minlevel 1
 
 * Hail Hydra?!
 
