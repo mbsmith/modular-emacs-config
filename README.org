@@ -1222,6 +1222,12 @@ the future.
   (load-theme 'solarized t))
 #+end_src
 
+I like using catppuccin from time to time as well.
+
+#+begin_src emacs-lisp
+(use-package catppuccin-theme :ensure t)
+#+end_src
+
 ** Modeline
 
 Doom emacs has a great modeline in my opinion so I'm using theirs almost
