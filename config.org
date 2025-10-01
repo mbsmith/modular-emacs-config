@@ -766,6 +766,18 @@ looking for.
   (embark-collect-mode . consult-preview-at-point-mode))
 #+end_src
 
+#+INCLUDE: "config/bufferlo.org" :minlevel 1
+
+#+begin_quote
+Easy-to-use buffer management and workspace persistence tools for Emacs workflow
+management. Headbutt your way to productivity and moove ahead with [[https://github.com/florommel/bufferlo][bufferlo]].
+#+end_quote
+
+INCLUDE
+
+#+begin_src emacs-lisp
+#+end_src
+
 * Error Checking
 
 ** Flycheck
@@ -862,7 +874,7 @@ a custom regular expression, and more.
 
 #+begin_src emacs-lisp
 (use-package orderless
-  :defer 1
+  :ensure t
   :custom
   (completion-styles '(orderless basic))
   (completion-category-defaults nil)
@@ -909,7 +921,7 @@ of a project, and convey the results to various completion facilities.
 
 #+begin_src emacs-lisp
 (use-package consult
-  ;; Replace bindings. Lazily loaded by `use-package'.
+  :ensure t
   :bind (;; C-c bindings in `mode-specific-map'
          ("C-c M-x" . consult-mode-command)
          ("C-c h" . consult-history)
@@ -1245,9 +1257,6 @@ choice is [[https://magit.vc/][Magit]].  I've kept the configuration pretty mini
 forge support really.
 
 #+begin_src emacs-lisp
-;; Use up to date transient.
-(use-package transient :demand t)
-
 (use-package magit
   :defer t
   :custom

@@ -1,0 +1,208 @@
+** Buferlo
+
+The package itself sums it up best.
+
+#+begin_quote
+Easy-to-use buffer management and workspace persistence tools for Emacs workflow management.
+Headbutt your way to productivity and moove ahead with [[https://github.com/florommel/bufferlo][bufferlo]].
+#+end_quote
+
+This is great for keeping tabs seperate.
+
+#+begin_src emacs-lisp
+;; Bufferlo package configuration
+(use-package bufferlo
+  :ensure t
+  :demand t
+  :after (consult orderless)
+  :bind
+  ;; Main transient menu binding
+  (("C-x B" . bufferlo-transient))  ; Capital B to avoid conflict with switch-to-buffer
+  
+  :init
+  ;; These must be set before bufferlo is loaded
+  (setq bufferlo-menu-bar-show t)
+  (setq bufferlo-menu-bar-list-buffers 'ibuffer)
+  (setq bufferlo-prefer-local-buffers 'tabs)
+  (setq bufferlo-ibuffer-bind-local-buffer-filter t)
+  (setq bufferlo-ibuffer-bind-keys t)
+  
+  :config
+  ;; Enable bufferlo mode
+  (bufferlo-mode 1)
+  
+  ;; Optional: Enable bufferlo-anywhere mode for local buffer lists everywhere
+  (bufferlo-anywhere-mode 1)
+  
+  ;; Mode-line configuration
+  (setq bufferlo-mode-line-prefix "🐃")
+  (setq bufferlo-mode-line-set-active-prefix "Ⓢ")
+  (setq bufferlo-mode-line-frame-prefix "Ⓕ")
+  (setq bufferlo-mode-line-tab-prefix "Ⓣ")
+  (setq bufferlo-mode-line-left-prefix nil)
+  (setq bufferlo-mode-line-right-suffix nil)
+  
+  ;; Buffer management policies
+  (setq bufferlo-kill-buffers-prompt t)
+  (setq bufferlo-kill-modified-buffers-policy 'retain-modified-kill-without-file-name)
+  (setq bufferlo-delete-frame-kill-buffers-prompt t)
+  (setq bufferlo-close-tab-kill-buffers-prompt t)
+  
+  ;; Bookmark configuration
+  (setq bufferlo-bookmark-frame-save-on-delete 'when-bookmarked)
+  (setq bufferlo-bookmark-tab-save-on-close 'when-bookmarked)
+  (setq bufferlo-bookmark-frame-load-make-frame 'restore-geometry)
+  (setq bufferlo-bookmark-frame-load-policy 'prompt)
+  (setq bufferlo-bookmark-frame-duplicate-policy 'prompt)
+  (setq bufferlo-bookmark-tab-replace-policy 'new)
+  (setq bufferlo-bookmark-tab-duplicate-policy 'prompt)
+  (setq bufferlo-bookmarks-save-duplicates-policy 'prompt)
+  
+  ;; Auto-save configuration (optional - adjust interval as needed)
+  (setopt bufferlo-bookmarks-auto-save-interval (* 60 5)) ; 5 minutes
+  (setq bufferlo-bookmarks-auto-save-messages 'saved)
+  
+  ;; Filter configuration for bookmark saving
+  (setq bufferlo-bookmark-buffers-exclude-filters
+        (list
+         (rx bos " " (1+ anything))      ; ignores "invisible" buffers
+         (rx bos "*" (1+ anything) "*"))) ; ignores "special" buffers
+  
+  (setq bufferlo-bookmark-buffers-include-filters
+        (list
+         (rx bos "*shell*")
+         (rx bos "*" (1+ anything) "-shell*")
+         (rx bos "*eshell*")
+         (rx bos "*" (1+ anything) "-eshell*")))
+  
+  ;; New tabs start with scratch buffer
+  (setq tab-bar-new-tab-choice "*scratch*")
+  
+  ;; New frames start with scratch buffer
+  (add-hook 'after-make-frame-functions #'bufferlo-switch-to-scratch-buffer)
+  
+  ;; Consult integration
+  (defvar my:bufferlo-consult--source-local-buffers
+    (list :name "Bufferlo Local Buffers"
+          :narrow ?l
+          :category 'buffer
+          :face 'consult-buffer
+          :history 'buffer-name-history
+          :state #'consult--buffer-state
+          :default t
+          :items (lambda () (consult--buffer-query
+                            :predicate #'bufferlo-local-buffer-p
+                            :sort 'visibility
+                            :as #'buffer-name)))
+    "Local Bufferlo buffer candidate source for `consult-buffer'.")
+  
+  (defvar my:bufferlo-consult--source-other-buffers
+    (list :name "Bufferlo Other Buffers"
+          :narrow ?o
+          :category 'buffer
+          :face 'consult-buffer
+          :history 'buffer-name-history
+          :state #'consult--buffer-state
+          :items (lambda () (consult--buffer-query
+                            :predicate #'bufferlo-non-local-buffer-p
+                            :sort 'visibility
+                            :as #'buffer-name)))
+    "Non-local Bufferlo buffer candidate source for `consult-buffer'.")
+  
+  (defvar my:bufferlo-consult--source-all-buffers
+    (list :name "Bufferlo All Buffers"
+          :narrow ?a
+          :hidden t
+          :category 'buffer
+          :face 'consult-buffer
+          :history 'buffer-name-history
+          :state #'consult--buffer-state
+          :items (lambda () (consult--buffer-query
+                            :sort 'visibility
+                            :as #'buffer-name)))
+    "All Bufferlo buffer candidate source for `consult-buffer'.")
+  
+  ;; Add consult sources in reverse order of display preference
+  (add-to-list 'consult-buffer-sources 'my:bufferlo-consult--source-all-buffers)
+  (add-to-list 'consult-buffer-sources 'my:bufferlo-consult--source-other-buffers)
+  (add-to-list 'consult-buffer-sources 'my:bufferlo-consult--source-local-buffers))
+
+;; Transient menu for bufferlo
+(use-package transient
+  :ensure t
+  :after bufferlo
+  :config
+  (transient-define-prefix bufferlo-transient ()
+    "Bufferlo management menu."
+    ["Buffer Management"
+     ["Local Buffers"
+      ("b" "Switch to buffer" bufferlo-switch-to-buffer)
+      ("B" "List buffers" bufferlo-list-buffers)
+      ("i" "Ibuffer (local)" bufferlo-ibuffer)]
+     ["Buffer Operations"
+      ("c" "Clear local list" bufferlo-clear)
+      ("r" "Remove buffer" bufferlo-remove)
+      ("k" "Kill local buffers" bufferlo-kill-buffers)
+      ("K" "Kill orphan buffers" bufferlo-kill-orphan-buffers)]]
+    
+    ["Bookmarks"
+     ["Frame Bookmarks"
+      ("fs" "Save frame" bufferlo-bookmark-frame-save)
+      ("fu" "Update frame" bufferlo-bookmark-frame-save-current)
+      ("fl" "Load frame" bufferlo-bookmark-frame-load)
+      ("fr" "Reload frame" bufferlo-bookmark-frame-load-current)
+      ("fm" "Merge frame" bufferlo-bookmark-frame-load-merge)]
+     ["Tab Bookmarks"
+      ("ts" "Save tab" bufferlo-bookmark-tab-save)
+      ("tu" "Update tab" bufferlo-bookmark-tab-save-current)
+      ("tl" "Load tab" bufferlo-bookmark-tab-load)
+      ("tr" "Reload tab" bufferlo-bookmark-tab-load-current)]]
+    
+    ["Bookmark Sets & Management"
+     ["Sets"
+      ("ss" "Save set" bufferlo-set-save-interactive)
+      ("su" "Update set" bufferlo-set-save-current-interactive)
+      ("sl" "Load set" bufferlo-set-load-interactive)
+      ("sc" "Close set" bufferlo-set-close-interactive)
+      ("sC" "Clear set" bufferlo-set-clear-interactive)
+      ("sL" "List sets" bufferlo-set-list-interactive)]
+     ["General"
+      ("L" "Load bookmarks" bufferlo-bookmarks-load-interactive)
+      ("S" "Save bookmarks" bufferlo-bookmarks-save-interactive)
+      ("C" "Close bookmarks" bufferlo-bookmarks-close-interactive)
+      ("R" "Raise bookmark" bufferlo-bookmark-raise)]]
+    
+    ["Navigation & Utilities"
+     ["Navigation"
+      ("/" "Find buffer" bufferlo-find-buffer)
+      ("." "Find & switch" bufferlo-find-buffer-switch)
+      ("o" "List orphans" bufferlo-list-orphan-buffers)
+      ("O" "Ibuffer orphans" bufferlo-ibuffer-orphans)]
+     ["Project"
+      ("p" "Isolate project" bufferlo-isolate-project)]
+     ["Frame/Tab Operations"
+      ("d" "Delete frame & kill buffers" bufferlo-delete-frame-kill-buffers)
+      ("x" "Close tab & kill buffers" bufferlo-tab-close-kill-buffers)]]
+    
+    ["Quick Actions"
+     ("q" "Quit" transient-quit-one)
+     ("<escape>" "Quit" transient-quit-one)]))
+
+;; Optional: Additional helper functions for common workflows
+(defun my/bufferlo-switch-project ()
+  "Switch to a project and isolate its buffers."
+  (interactive)
+  (call-interactively 'project-switch-project)
+  (bufferlo-isolate-project))
+
+(defun my/bufferlo-new-workspace (name)
+  "Create a new tab with a specific bookmark name."
+  (interactive "sWorkspace name: ")
+  (tab-bar-new-tab)
+  (bufferlo-bookmark-tab-save name))
+
+(defun my/bufferlo-switch-workspace ()
+  "Switch to a saved workspace (tab bookmark)."
+  (interactive)
+  (call-interactively 'bufferlo-bookmark-tab-load))
+#+end_src
