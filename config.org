@@ -1186,6 +1186,10 @@ well.
                          ("terminfo/65" "terminfo/65/*")
                          ("integration" "integration/*")
                          (:exclude ".dir-locals.el" "*-tests.el")))
+  :hooks
+  (eat-mode-hook . eat-char-mode)
+  (eshell-load-hook . eat-eshell-mode)
+  (eshell-load-hook . eat-eshell-visual-command-mode)
   :custom
   (eat-kill-buffer-on-exit t)
   :config
@@ -1194,7 +1198,6 @@ well.
   (setopt eat-default-cursor-type '(t nil nil))
   (setq process-adaptive-read-buffering nil)
   (setq read-process-output-max (* 4 1024 1024))
-  (add-hook 'eat-mode-hook (lambda () (eat-char-mode)))
   ;; Compile terminfo if needed
   (eat-compile-terminfo))
 #+end_src
