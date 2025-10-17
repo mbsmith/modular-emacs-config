@@ -1186,7 +1186,7 @@ well.
                          ("terminfo/65" "terminfo/65/*")
                          ("integration" "integration/*")
                          (:exclude ".dir-locals.el" "*-tests.el")))
-  :hooks
+  :hook
   (eat-mode-hook . eat-char-mode)
   (eshell-load-hook . eat-eshell-mode)
   (eshell-load-hook . eat-eshell-visual-command-mode)
