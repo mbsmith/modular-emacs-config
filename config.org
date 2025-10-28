@@ -836,6 +836,7 @@ with the other packages in this section to provide it with candidates.
 
   :init
   (global-corfu-mode)
+  (corfu-popupinfo-mode) ;; Show docs next to candidates.
 
   :config
   ;; Free the RET key for less intrusive behavior.
