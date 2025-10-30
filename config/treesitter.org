@@ -1,0 +1,24 @@
+* Tree Sitter
+
+Tree sitter is included with emacs, but there are a couple of packages that
+make managing tree sitter easier.  Mainly with automatically updating, and
+using tree sitter versions of major modes, and installing the parsers if
+needed.
+
+#+begin_src emacs-lisp
+;; Treesit
+(setq treesit-language-source-alist
+      '((rust "https://github.com/tree-sitter/tree-sitter-rust")))
+
+(use-package treesit-auto
+  :custom
+  (treesit-auto-install 'prompt)
+  :config
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  (global-treesit-auto-mode))
+
+(use-package treesit-fold
+  :ensure t
+  :defer t)
+#+end_src
+
