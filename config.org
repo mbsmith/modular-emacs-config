@@ -202,6 +202,8 @@ features.
 
 #+INCLUDE: "config/auth.org" :minlevel 1
 
+#+INCLUDE: "config/path.org" :minlevel 1
+
 #+INCLUDE: "config/profiling.org" :minlevel 1
 
 #+INCLUDE: "config/general.org" :minlevel 1

@@ -1,0 +1,26 @@
+* Optional Customizations
+
+Some of these seem to work well on any system so far, but won't automatically
+be tangled.  They're here for reference if need be, however.
+
+#+begin_src emacs-lisp :tangle no
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("e8183add41107592ee785f9f9b4b08d21bd6c43206b85bded889cea1ee231337"
+     default))
+ '(geiser-chez-binary "chez")
+ '(highlight-indent-guides-auto-character-face-perc 75)
+ '(highlight-indent-guides-method 'character)
+ '(highlight-indent-guides-responsive 'top))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(font-lock-comment-face ((t (:slant italic))))
+ '(font-lock-doc-face ((t (:inherit font-lock-string-face :slant italic)))))
+#+end_src

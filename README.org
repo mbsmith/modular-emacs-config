@@ -205,6 +205,7 @@ configuration I do *indeed* use it as an editor.
 (setq-default tab-width 2)
 (editorconfig-mode)
 #+end_src
+
 * Garbage Collection
 
 There's a lot of clashes that can happen with regards to performance, and
@@ -480,112 +481,6 @@ on a system by system basis.
 (maybe-load-rel "extra/feed.el")
 (maybe-load-rel "extra/social.el")
 ;;;
-#+end_src
-
-* Hail Hydra?!
-
-I find that [[https://github.com/abo-abo/hydra][Hydra]] is great for providing visual menus for tasks that might
-otherwise be fairly unwieldy.  I use them hydra's for windows, tabs, and a
-few other things in the future perhaps.
-
-** Tabs
-
-Pretty simple tab hydra.  Handles opening, closing, and simple navigation.
-
-#+name: tab-hydra
-#+begin_src emacs-lisp :tangle no
-  (defhydra hydra-tab (:color red :hint nil)
-    "
-Movement^^    ^Modifier^
-----------------------------------------------------------------
-_h_ ←        _n_ ew
-_l_ →        _c_ lose
-"
-    ("h" tab-previous)
-    ("l" tab-next)
-    ("n" tab-new)
-    ("c" tab-close)
-    ("SPC" nil))
-  (global-set-key (kbd "C-c t") 'hydra-tab/body)
-#+end_src
-
-** Windows
-
-Quite a helpful window hydra.  I cannot take credit for this.  I copied it
-from somewhere.  When I find the link I'll add it here.
-
-#+name: window-hydra
-#+begin_src emacs-lisp :tangle no
-  (defhydra hydra-window (:color red :hint nil)
-    "
-Movement^^        ^Split^         ^Switch^		^Resize^
-----------------------------------------------------------------
-_h_ ←       	_v_ertical    	_b_uffer		_q_ X←
-_j_ ↓        	_x_ horizontal	_f_ind files	_w_ X↓
-_k_ ↑        	_z_ undo      	_a_ce 1		_e_ X↑
-_l_ →        	_Z_ reset      	_s_wap		_r_ X→
-_F_ollow		_D_lt Other   	_S_ave		max_i_mize
-_SPC_ cancel	_o_nly this   	_d_elete
-"
-    ("h" windmove-left )
-    ("j" windmove-down )
-    ("k" windmove-up )
-    ("l" windmove-right )
-    ("q" hydra-move-splitter-left)
-    ("w" hydra-move-splitter-down)
-    ("e" hydra-move-splitter-up)
-    ("r" hydra-move-splitter-right)
-    ("b" consult-buffer)
-    ("f" consult-fd)
-    ("F" follow-mode)
-    ("a" (lambda ()
-           (interactive)
-           (ace-window 1)
-           (add-hook 'ace-window-end-once-hook
-                     'hydra-window/body))
-     )
-    ("v" (lambda ()
-           (interactive)
-           (split-window-right)
-           (windmove-right))
-     )
-    ("x" (lambda ()
-           (interactive)
-           (split-window-below)
-           (windmove-down))
-     )
-    ("s" (lambda ()
-           (interactive)
-           (ace-window 4)
-           (add-hook 'ace-window-end-once-hook
-                     'hydra-window/body)))
-    ("S" save-buffer)
-    ("d" delete-window)
-    ("D" (lambda ()
-           (interactive)
-           (ace-window 16)
-           (add-hook 'ace-window-end-once-hook
-                     'hydra-window/body))
-     )
-    ("o" delete-other-windows)
-    ("i" ace-maximize-window)
-    ("z" (progn
-           (winner-undo)
-           (setq this-command 'winner-undo))
-     )
-    ("Z" winner-redo)
-    ("SPC" nil))
-  (global-set-key (kbd "C-c w") 'hydra-window/body)
-#+end_src
-
-** Pulling it all together
-
-#+begin_src emacs-lisp
-(use-package hydra
-	:demand t
-  :config
-  <<tab-hydra>>
-  <<window-hydra>>)
 #+end_src
 
 * Modal Editing
@@ -985,16 +880,6 @@ This is great for keeping tabs seperate.
   (call-interactively 'bufferlo-bookmark-tab-load))
 #+end_src
 
-#+begin_quote
-Easy-to-use buffer management and workspace persistence tools for Emacs workflow
-management. Headbutt your way to productivity and moove ahead with [[https://github.com/florommel/bufferlo][bufferlo]].
-#+end_quote
-
-INCLUDE
-
-#+begin_src emacs-lisp
-#+end_src
-
 * Error Checking
 
 ** Flycheck
@@ -1053,6 +938,7 @@ with the other packages in this section to provide it with candidates.
 
   :init
   (global-corfu-mode)
+  (corfu-popupinfo-mode) ;; Show docs next to candidates.
 
   :config
   ;; Free the RET key for less intrusive behavior.
