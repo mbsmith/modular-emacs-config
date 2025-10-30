@@ -206,58 +206,7 @@ features.
 
 #+INCLUDE: "config/general.org" :minlevel 1
 
-* Blocks, Parentheses and Formatting Oh My!
-
-** Parentheses, and Structural Editing
-
-Sometimes if I delete a parenthesis out of hand I spend the next minute or two
-kicking myself as I count the parentheses here and there.  Well no more!  With
-[[https://shaunlebron.github.io/parinfer/][Parinfer]] structural editing, and taming parentheses becomes a
-breeze.
-
-#+begin_src emacs-lisp
-(use-package parinfer-rust-mode
-  :ensure t
-  :init
-  (setq parinfer-rust-auto-download t)
-  :hook (emacs-lisp-mode . parinfer-rust-mode))
-#+end_src
-
-I also have =smart-parens= for parentheses matching in modes where =parinfer= would
-be overkill.
-
-#+begin_src  emacs-lisp
-(use-package smartparens
-  :ensure t
-  :hook (prog-mode text-mode markdown-mode)
-  :config
-  (require 'smartparens-config))
-#+end_src
-
-Might as well highlight the parentheses to make them easier to spot.
-
-#+begin_src emacs-lisp
-(use-package highlight-parentheses
-  :ensure t
-  :hook
-  (prog-mode . highlight-parentheses-mode))
-#+end_src
-
-** Indentation Level
-
-#+begin_src emacs-lisp
-;; Indent guides
-(use-package highlight-indent-guides
-  :defer t
-  :hook (prog-mode . highlight-indent-guides-mode))
-#+end_src
-
-** List, and String Improvements
-
-#+begin_src emacs-lisp
-(use-package dash :ensure t)
-(use-package s :ensure t)
-#+end_src
+#+INCLUDE: "config/formatting.org" :minlevel 1
 
 * Documentation
 
