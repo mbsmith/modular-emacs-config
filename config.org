@@ -216,13 +216,9 @@ features.
 
 #+INCLUDE: "config/qol.org" :minlevel 1
 
-<<<<<<< Updated upstream
-* Error Checking
-=======
 #+INCLUDE: "config/bufferlo.org" :minlevel 1
 
 #+INCLUDE: "config/error.org" :minlevel 1
->>>>>>> Stashed changes
 
 ** Flycheck
 
@@ -240,6 +236,9 @@ Of course it's always useful to have a debugger handy.
 #+begin_src emacs-lisp
 (use-package dap-mode :defer t)
 #+end_src
+=======
+#+INCLUDE: "config/error.org" :minlevel 1
+>>>>>>> 7a6516d (Moved error section into its own file.)
 
 * Modern Completion Stack
 

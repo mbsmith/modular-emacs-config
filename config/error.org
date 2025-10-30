@@ -1,0 +1,19 @@
+* Error Checking
+
+** Flycheck
+
+I've found flycheck to be an excellent checker.  Capable of interacting with
+many backends at once.  Be they linters, or LSPs.
+
+#+begin_src emacs-lisp
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode))
+#+end_src
+
+Of course it's always useful to have a debugger handy.
+
+#+begin_src emacs-lisp
+(use-package dap-mode :defer t)
+#+end_src
+
