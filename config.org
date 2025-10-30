@@ -220,25 +220,7 @@ features.
 
 #+INCLUDE: "config/error.org" :minlevel 1
 
-** Flycheck
-
-I've found flycheck to be an excellent checker.  Capable of interacting with
-many backends at once.  Be they linters, or LSPs.
-
-#+begin_src emacs-lisp
-(use-package flycheck
-  :ensure t
-  :init (global-flycheck-mode))
-#+end_src
-
-Of course it's always useful to have a debugger handy.
-
-#+begin_src emacs-lisp
-(use-package dap-mode :defer t)
-#+end_src
-=======
 #+INCLUDE: "config/error.org" :minlevel 1
->>>>>>> 7a6516d (Moved error section into its own file.)
 
 * Modern Completion Stack
 
@@ -465,6 +447,9 @@ of a project, and convey the results to various completion facilities.
   ;; (keymap-set consult-narrow-map (concat consult-narrow-key " ?") #'consult-narrow-help)
   )
 #+end_src
+=======
+#+INCLUDE: "config/completion.org" :minlevel 1
+>>>>>>> caf7087 (Moved completion section into its own file.)
 
 * Files
 
