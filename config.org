@@ -214,90 +214,15 @@ features.
 
 #+INCLUDE: "config/modal.org" :minlevel 1
 
-* Quality of Life
+#+INCLUDE: "config/qol.org" :minlevel 1
 
-These packages make my emacs usage a lot more pleasant.  Many packages that are
-mostly aimed towards this end will go here.
-
-** which-key
-
-This is now included in emacs, but I do make a slight modification to the default
-behavior as I enable it.
-
-#+begin_src emacs-lisp
-(which-key-mode)
-(which-key-setup-side-window-bottom)
-#+end_src
-
-** anzu
-
-Great package that highlights matches and displays match total on the status
-bar.
-
-#+begin_src emacs-lisp
-(use-package anzu
-  :defer 10
-  :config (global-anzu-mode))
-#+end_src
-
-** Embark
-
-[[https://github.com/oantolin/embark][Embark]] is like a DWIM version of which-key in a sense.  Though it is more
-oriented towards maps rather than every possible key.  Before reaching
-for a manual I often give embark a try in the buffer and find what I'm
-looking for.
-
-#+begin_src emacs-lisp
-(use-package embark
-  :ensure t
-
-  :bind
-  (("C-." . embark-act)         ;; pick some comfortable binding
-   ("C-;" . embark-dwim)        ;; good alternative: M-.
-   ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
-
-  :init
-
-  ;; Optionally replace the key help with a completing-read interface
-  (setq prefix-help-command #'embark-prefix-help-command)
-
-  ;; Show the Embark target at point via Eldoc. You may adjust the
-  ;; Eldoc strategy, if you want to see the documentation from
-  ;; multiple providers. Beware that using this can be a little
-  ;; jarring since the message shown in the minibuffer can be more
-  ;; than one line, causing the modeline to move up and down:
-
-  ;; (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
-  ;; (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
-
-  :config
-
-  ;; Hide the mode line of the Embark live/completions buffers
-  (add-to-list 'display-buffer-alist
-               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                 nil
-                 (window-parameters (mode-line-format . none)))))
-
-;; Consult users will also want the embark-consult package.
-(use-package embark-consult
-  :ensure t ; only need to install it, embark loads it after consult if found
-  :hook
-  (embark-collect-mode . consult-preview-at-point-mode))
-#+end_src
-
+<<<<<<< Updated upstream
+* Error Checking
+=======
 #+INCLUDE: "config/bufferlo.org" :minlevel 1
 
-#+begin_quote
-Easy-to-use buffer management and workspace persistence tools for Emacs workflow
-management. Headbutt your way to productivity and moove ahead with [[https://github.com/florommel/bufferlo][bufferlo]].
-#+end_quote
-
-INCLUDE
-
-#+begin_src emacs-lisp
-#+end_src
-
-* Error Checking
+#+INCLUDE: "config/error.org" :minlevel 1
+>>>>>>> Stashed changes
 
 ** Flycheck
 
@@ -1036,32 +961,7 @@ taking tool has.
         org-roam-ui-open-on-start t))
 #+end_src
 
-* Optional Customizations
-
-Some of these seem to work well on any system so far, but won't automatically
-be tangled.  They're here for reference if need be, however.
-
-#+begin_src emacs-lisp :tangle no
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("e8183add41107592ee785f9f9b4b08d21bd6c43206b85bded889cea1ee231337"
-     default))
- '(geiser-chez-binary "chez")
- '(highlight-indent-guides-auto-character-face-perc 75)
- '(highlight-indent-guides-method 'character)
- '(highlight-indent-guides-responsive 'top))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(font-lock-comment-face ((t (:slant italic))))
- '(font-lock-doc-face ((t (:inherit font-lock-string-face :slant italic)))))
-#+end_src
+#+INCLUDE: "config/custom.org" :minlevel 1
 
 #+begin_src emacs-lisp :exports none
 (maybe-load-rel "custom.el")
