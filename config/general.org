@@ -1,0 +1,112 @@
+* General Settings
+
+I have some configuration tweaks on existing features in emacs.
+
+** Fancy Compile Output
+
+Just want to add a bit of color to compilation output.  This also will scroll
+to the first error if there is one.
+
+#+begin_src emacs-lisp
+(use-feature compile
+  :commands (compile recompile)
+  :custom (compilation-scroll-output 'first-error)
+  :config
+  (defun +compilation-colorize ()
+    "Colorize from `compilation-filter-start' to `point'."
+    (require 'ansi-color)
+    (let ((inhibit-read-only t))
+      (ansi-color-apply-on-region (point-min) (point-max))))
+  (add-hook 'compilation-filter-hook #'+compilation-colorize))
+#+end_src
+
+** General Emacs Settings
+
+These are my overall emacs settings.  More settings could be moved here.  Though
+keep the loading order in mind when doing so.
+
+#+begin_src emacs-lisp
+(use-feature emacs
+  :demand t
+  :config
+  (epa-file-enable)
+  (setq epg-pinentry-mode 'loopback)
+  (setq epa-file-encrypt-to '("xulfer@cheapbsd.net"))
+  :custom
+  (scroll-conservatively 101 "Scroll just enough to bring text into view")
+  (enable-recursive-minibuffers t "Allow minibuffer commands in minibuffer")
+  (frame-title-format '(buffer-file-name "%f" ("%b"))
+                      "Make frame title current file's name.")
+  (find-library-include-other-files nil)
+  (indent-tabs-mode nil "Use spaces, not tabs")
+  (inhibit-startup-screen t)
+  (history-delete-duplicates t "Don't clutter history")
+  (pgtk-use-im-context-on-new-connection nil "Prevent GTK from stealing Shift + Space")
+  (sentence-end-double-space nil "Double space sentence demarcation breaks sentence navigation in Evil")
+  (tab-stop-list (number-sequence 2 120 2))
+  (tab-width 2 "Shorter tab widths")
+  (completion-styles '(flex basic partial-completion emacs22))
+  (report-emacs-bug-no-explanations t)
+  (report-emacs-bug-no-confirmation t)
+  (setq shr-use-xwidgets-for-media t))
+#+end_src
+
+** Diffs
+
+I have a slight tweak to diff output here.  Mainly making the diff horizontally
+split by default.
+
+#+begin_src emacs-lisp
+(use-feature ediff
+  :defer t
+  :custom
+  (ediff-window-setup-function #'ediff-setup-windows-plain)
+  (ediff-split-window-function #'split-window-horizontally)
+  :config
+  (add-hook 'ediff-quit-hook #'winner-undo))
+#+end_src
+
+** Minibuffer
+
+The minibuffer is already pretty well sorted by other packages that will be
+discussed later.  However, there is still a bit of tidying that can be done
+with long paths, and some helpful file based completion.
+
+#+begin_src emacs-lisp
+(use-feature minibuffer
+  :custom (read-file-name-completion-ignore-case t)
+  :config
+  (defun +minibuffer-up-dir ()
+    "Trim rightmost directory component of `minibuffer-contents'."
+    (interactive)
+    (unless (minibufferp) (user-error "Minibuffer not selected"))
+    (let* ((f (directory-file-name (minibuffer-contents)))
+           (s (file-name-directory f)))
+      (delete-minibuffer-contents)
+      (when s (insert s))))
+  (define-key minibuffer-local-filename-completion-map
+              (kbd "C-h") #'+minibuffer-up-dir)
+  (minibuffer-depth-indicate-mode))
+#+end_src
+
+** Remote Editing
+
+There are a lot of solutions for editing files, and projects remotely.  At the moment
+[[https://www.gnu.org/software/tramp/][tramp]] still seems to work perfectly well... albeit somewhat slower than I'd like.
+
+#+begin_src emacs-lisp
+(use-feature tramp
+  :config
+  ;; Enable full-featured Dirvish over TRAMP on ssh connections
+  ;; https://www.gnu.org/software/tramp/#Improving-performance-of-asynchronous-remote-processes
+  (connection-local-set-profile-variables
+   'remote-direct-async-process
+   '((tramp-direct-async-process . t)))
+  (connection-local-set-profiles
+   '(:application tramp :protocol "ssh")
+   'remote-direct-async-process)
+  ;; Tips to speed up connections
+  (setq tramp-verbose 0)
+  (setq tramp-chunksize 2000)
+  (setq tramp-ssh-controlmaster-options nil))
+#+end_src
