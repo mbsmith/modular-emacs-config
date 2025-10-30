@@ -1,0 +1,14 @@
+* Path
+
+Rather than having to manage potential paths in the configuration I'll use the
+[[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]] package.  This pulls in =$PATH= from various different shells
+and operating systems.  At least BSD, Linux, and MacOS are supported anyway.
+
+
+#+BEGIN_SRC emacs-lisp
+(use-package exec-path-from-shell
+  :ensure t
+  :config
+  (when (memq window-system '(mac ns))
+    (exec-path-from-shell-initialize)))
+#+end_src
