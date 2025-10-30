@@ -1,0 +1,17 @@
+* Keeping things tidy
+
+I'd like to keep all of my configuration, and emacs files in one place.  I've found
+the [[https://github.com/emacscollective/no-littering][no-littering]] package does this well.  This keeps everything under the .emacs.d
+directory rather than littering $HOME.
+
+#+begin_src emacs-lisp
+(use-package no-littering
+  :ensure t
+  :config
+  (no-littering-theme-backups)
+  (let ((dir (no-littering-expand-var-file-name "lock-files/")))
+    (make-directory dir t)
+    (setq lock-file-name-transforms `((".*" ,dir t))))
+  (setq custom-file (expand-file-name "custom.el" user-emacs-directory)))
+#+end_src
+
