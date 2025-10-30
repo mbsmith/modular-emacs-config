@@ -1,0 +1,15 @@
+* Documentation
+
+If possible I like to have documentation within the editor itself so
+I can easily read and look at the material easily.
+
+** devdocs.el
+
+This [[https://github.com/astoff/devdocs.el][plugin]] browses documentation from [[https://devdocs.io][devdocs.io]].  I haven't used this
+enough to vouch for it's accuracy, but it seems fine.
+
+#+begin_src emacs-lisp
+(use-package devdocs
+  :ensure t
+  :bind ("C-h D" . devdocs-lookup))
+#+end_src
