@@ -1,0 +1,49 @@
+* Look and Feel
+
+I've already touched on some appearance settings so far, but I feel themes and
+such deserve their own space.
+
+** Themes
+
+I'm currently only using solarized light as it seems to be the most readable
+theme. Perhaps I might toggle light/dark mode based on time, or lighting in
+the future.
+
+#+begin_src emacs-lisp
+(use-package color-theme-solarized
+  :ensure (:host github 
+                 :repo "sellout/emacs-color-theme-solarized"
+                 :files ("*.el"))
+  :no-require t
+  :init
+  (customize-set-variable 'frame-background-mode 'dark)
+  (load-theme 'solarized t))
+#+end_src
+
+I like using catppuccin from time to time as well.
+
+#+begin_src emacs-lisp
+(use-package catppuccin-theme :ensure t)
+#+end_src
+
+** Modeline
+
+Doom emacs has a great modeline in my opinion so I'm using theirs almost
+as is.  It comes with some pretty nice customization features should it be
+necessary.
+
+#+begin_src emacs-lisp
+(use-package doom-modeline
+  :defer 2
+  :config
+  (doom-modeline-mode)
+  :custom
+  (doom-modeline-time-analogue-clock nil)
+  (doom-modeline-time-icon nil)
+  (doom-modeline-unicode-fallback nil)
+  (doom-modeline-buffer-encoding 'nondefault)
+  (display-time-load-average nil)
+  (doom-modeline-icon t "Show icons in the modeline"))
+#+end_src
+
+
