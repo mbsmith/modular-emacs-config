@@ -1,0 +1,19 @@
+* VCS
+
+When it comes to git, (which is all that's configured for now), the easy
+choice is [[https://magit.vc/][Magit]].  I've kept the configuration pretty minimal.  Only adding
+forge support really.
+
+#+begin_src emacs-lisp
+(use-package magit
+  :defer t
+  :custom
+  (magit-repository-directories (list (cons elpaca-repos-directory 1)))
+  (magit-diff-refine-hunk 'all)
+  :config
+  (transient-bind-q-to-quit))
+
+(use-package forge
+  :after (magit))
+#+end_src
+
