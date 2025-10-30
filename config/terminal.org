@@ -1,0 +1,36 @@
+* Terminal
+
+I've been using [[https://codeberg.org/akib/emacs-eat][eat]] (Emulate A Terminal) in place of vterm lately as it has
+better emacs integration without too big of a performance hit.  It doesn't
+handle fancy terminal applications quite as well, but so far has performed
+well.
+
+#+begin_src emacs-lisp
+(use-package eat
+  :ensure (:type git
+                 :host codeberg
+                 :repo "akib/emacs-eat"
+                 :files ("*.el" ("term" "term/*.el") "*.texi"
+                         "*.ti" ("terminfo/e" "terminfo/e/*")
+                         ("terminfo/65" "terminfo/65/*")
+                         ("integration" "integration/*")
+                         (:exclude ".dir-locals.el" "*-tests.el")))
+  :hook
+  (eat-mode-hook . eat-char-mode)
+  (eshell-load-hook . eat-eshell-mode)
+  (eshell-load-hook . eat-eshell-visual-command-mode)
+  :custom
+  (eat-kill-buffer-on-exit t)
+  :config
+  (setopt eat-shell-prompt-annotation-delay 0)
+  (setopt eat-very-visible-cursor-type '(t nil nil))
+  (setopt eat-default-cursor-type '(t nil nil))
+  (setq process-adaptive-read-buffering nil)
+  (setq read-process-output-max (* 4 1024 1024))
+  ;; Compile terminfo if needed
+  (eat-compile-terminfo))
+#+end_src
+
+Many of these settings are there to reduce flickering.  They may not be needed
+long term.
+
