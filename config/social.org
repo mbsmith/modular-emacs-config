@@ -1,0 +1,21 @@
+* Socializing
+
+Here are some things I use to optionally communicate with the rest of the world
+via Emacs.  I keep them in separate files so I can optionally load them easily
+on a system by system basis.
+
+#+begin_src emacs-lisp
+;;; Extra optional files
+
+(defun maybe-load-rel (relpath)
+  "Loads a file relative to the user-emacs-directory fi it exists."
+  (let ((path (concat (file-name-as-directory user-emacs-directory) relpath)))
+    (when (file-exists-p path)
+      (load-file path))))
+
+(maybe-load-rel "extra/email.el")
+(maybe-load-rel "extra/feed.el")
+(maybe-load-rel "extra/social.el")
+;;;
+#+end_src
+
