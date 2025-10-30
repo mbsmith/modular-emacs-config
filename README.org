@@ -72,6 +72,7 @@ warnings.
 
 (setq native-comp-async-report-warnings-errors nil)
 (setenv "LSP_USE_PLISTS" "true")
+(setq lsp-use-plists t)
 #+end_src
 
 ** Appearance
@@ -204,7 +205,6 @@ configuration I do *indeed* use it as an editor.
 (setq-default tab-width 2)
 (editorconfig-mode)
 #+end_src
-
 * Garbage Collection
 
 There's a lot of clashes that can happen with regards to performance, and
@@ -1509,6 +1509,7 @@ the package.
          (clojure-ts-mode . lsp-deferred)
          (elixir-ts-mode . lsp-deferred)
          (gleam-ts-mode . lsp-deferred)
+         (python-ts-mode . lsp-deferred)
          (rust-ts-mode . lsp-deferred)
          (slint-mode . lsp-deferred)
          (zig-mode . lsp-deferred)

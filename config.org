@@ -72,6 +72,7 @@ warnings.
 
 (setq native-comp-async-report-warnings-errors nil)
 (setenv "LSP_USE_PLISTS" "true")
+(setq lsp-use-plists t)
 #+end_src
 
 ** Appearance
@@ -195,23 +196,7 @@ features.
 
 #+INCLUDE: "config/editing.org" :minlevel 1
 
-* Garbage Collection
-
-There's a lot of clashes that can happen with regards to performance, and
-garbage collection.  There are a lot of [[https://emacsredux.com/blog/2025/03/28/speed-up-emacs-startup-by-tweaking-the-gc-settings/][settings]] improvements that can make
-a huge difference in this regard.  Especially when it comes to LSPs,
-completion, and the like.  I've chosen to let GCCH (Garbage Collector
-Magic Hack) to handle this.  It seems to work pretty well.
-
-#+begin_src emacs-lisp
-;; Garbage collection
-(use-package gcmh
-  :ensure t
-  :hook (after-init . gcmh-mode)
-  :custom
-  (gcmh-idle-delay 'auto)
-  (gcmh-auto-idle-delay-factor 10))
-#+end_src
+#+INCLUDE: "config/gc.org" :minlevel 1
 
 * Keeping things tidy
 
@@ -1293,6 +1278,7 @@ the package.
          (clojure-ts-mode . lsp-deferred)
          (elixir-ts-mode . lsp-deferred)
          (gleam-ts-mode . lsp-deferred)
+         (python-ts-mode . lsp-deferred)
          (rust-ts-mode . lsp-deferred)
          (slint-mode . lsp-deferred)
          (zig-mode . lsp-deferred)
