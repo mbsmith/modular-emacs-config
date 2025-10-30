@@ -1,0 +1,34 @@
+* Language Server Protocol
+
+LSP can be quite helpful for completions that are non-trivial.  There are many
+flavors of LSP for Emacs, but I'm only familiar with eglot, and [[https://emacs-lsp.github.io/lsp-mode/#language-server-protocol-support-for-emacs][lsp-mode]].  Eglot
+is built into emacs core now, and uses other built in component well.  However
+lsp-mode has some extra features that I think are worth having while also
+performing pretty well.  Plus it uses packages that I already add even without
+the package.
+
+#+begin_src emacs-lisp
+;; LSP
+(use-package lsp-mode
+  :init
+  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+  (setq lsp-keymap-prefix "C-c l")
+  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+         (c-ts-mode . lsp-deferred)
+         (clojure-ts-mode . lsp-deferred)
+         (elixir-ts-mode . lsp-deferred)
+         (gleam-ts-mode . lsp-deferred)
+         (python-ts-mode . lsp-deferred)
+         (rust-ts-mode . lsp-deferred)
+         (slint-mode . lsp-deferred)
+         (zig-mode . lsp-deferred)
+         ;; if you want which-key integration
+         (lsp-mode . lsp-enable-which-key-integration))
+  :commands lsp-deferred
+  :config
+  (setq lsp-elixir-server-command '("elixir-ls")))
+
+;; optionally
+(use-package lsp-ui :commands lsp-ui-mode)
+#+end_src
+
