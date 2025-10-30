@@ -1,0 +1,12 @@
+* Profiling
+
+Sometimes if I experience slow start times I've found [[https://github.com/jschaf/esup][esup]] does this quickly and
+without having to quit Emacs.
+
+#+begin_src emacs-lisp
+(use-package esup
+  :ensure t
+  :config
+  (setq esup-depth 0))
+#+end_src
+
