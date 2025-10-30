@@ -1,0 +1,11 @@
+* Auth sources
+
+I make sure the auth sources are within the emacs directory.  I use gpg, but in case there's
+a plain text one laying around I'll use that too.  Finally as I use pass I've enabled
+password-store as well;  Though I'm not sure this actually works currently.
+
+#+begin_src emacs-lisp
+(auth-source-pass-enable)
+(setq auth-sources '("~/.emacs.d/.authinfo.gpg" "~/.emacs.d/.authinfo"
+                     "password-store"))
+#+end_src
