@@ -32,6 +32,9 @@ keep the loading order in mind when doing so.
   (epa-file-enable)
   (setq epg-pinentry-mode 'loopback)
   (setq epa-file-encrypt-to '("xulfer@cheapbsd.net"))
+  :hook
+  (prog-mode-hook . flyspell-prog-mode)
+  (text-mode-hook . flyspell-mode)
   :custom
   (scroll-conservatively 101 "Scroll just enough to bring text into view")
   (enable-recursive-minibuffers t "Allow minibuffer commands in minibuffer")
