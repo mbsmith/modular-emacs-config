@@ -218,6 +218,8 @@ features.
 
 #+INCLUDE: "config/qol.org" :minlevel 1
 
+#+INCLUDE: "config/hydra.org" :minlevel 1
+
 #+INCLUDE: "config/bufferlo.org" :minlevel 1
 
 #+INCLUDE: "config/error.org" :minlevel 1
