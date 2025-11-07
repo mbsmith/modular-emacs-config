@@ -242,6 +242,8 @@ features.
 
 #+INCLUDE: "config/org_mode.org" :minlevel 1
 
+#+INCLUDE: "config/snippets.org" :minlevel 1
+
 #+INCLUDE: "config/custom.org" :minlevel 1
 
 #+begin_src emacs-lisp :exports none

@@ -1728,6 +1728,30 @@ taking tool has.
         org-roam-ui-open-on-start t))
 #+end_src
 
+* Snippets
+
+Snippets can be helpful in many situations.  However they can also get in the way.
+This is my *attempt* at making them helpful in most cases.
+
+** YASnippet
+
+[[https://github.com/joaotavora/yasnippet?tab=readme-ov-file][YASnippet]]  is a template system for Emacs. It allows you to type an abbreviation
+and automatically expand it into function templates.
+
+#+BEGIN_SRC emacs-lisp
+(use-package yasnippet
+  :hook (prog-mode . yas-minor-mode))
+#+END_SRC
+
+For now I'm just using [[https://github.com/AndreaCrotti/yasnippet-snippets][YASnippet-snippets]] to provide all of my snippets.  Custom
+ones may be added in the future.
+
+#+BEGIN_SRC emacs-lisp
+(use-package yasnippet-snippets
+  :after (yasnippet)
+  :init (yas-reload-all))
+#+END_SRC
+
 * Optional Customizations
 
 Some of these seem to work well on any system so far, but won't automatically
