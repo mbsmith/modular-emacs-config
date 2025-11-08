@@ -103,9 +103,9 @@ loading as a blank slate with only the scratch buffer open.
 (setq ring-bell-function #'ignore
       inhibit-startup-screen t)
 
-(push '(font . "Victor Mono-13") default-frame-alist)
-(set-face-font 'default "Victor Mono-13")
-(set-face-font 'variable-pitch "Victor Mono-13")
+(push '(font . "Cartograph CF-11") default-frame-alist)
+(set-face-font 'default "Cartograph CF-11")
+(set-face-font 'variable-pitch "Cartograph CF-11")
 
 (copy-face 'default 'fixed-pitch)
 
