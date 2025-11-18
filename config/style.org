@@ -16,7 +16,7 @@ the future.
                  :files ("*.el"))
   :no-require t
   :init
-  (customize-set-variable 'frame-background-mode 'dark)
+  (customize-set-variable 'frame-background-mode 'light)
   (load-theme 'solarized t))
 #+end_src
 
