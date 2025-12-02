@@ -433,6 +433,16 @@ Might as well highlight the parentheses to make them easier to spot.
   (prog-mode . highlight-parentheses-mode))
 #+end_src
 
+** Apheleia
+
+[[https://github.com/radian-software/apheleia][Aphelia]] tries to use the right formatting for any file and applies it asynchronously.
+
+#+BEGIN_SRC emacs-lisp
+(use-package apheleia
+  :config
+  (apheleia-global-mode +1))
+#+END_SRC
+
 ** Indentation Level
 
 #+begin_src emacs-lisp
@@ -1514,12 +1524,14 @@ the package.
   (setq lsp-keymap-prefix "C-c l")
   :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
          (c-ts-mode . lsp-deferred)
+         (c++-ts-mode . lsp-deferred)
          (clojure-ts-mode . lsp-deferred)
          (elixir-ts-mode . lsp-deferred)
          (gleam-ts-mode . lsp-deferred)
          (python-ts-mode . lsp-deferred)
          (rust-ts-mode . lsp-deferred)
          (slint-mode . lsp-deferred)
+         (toml-ts-mode . lsp-deferred)
          (zig-mode . lsp-deferred)
          ;; if you want which-key integration
          (lsp-mode . lsp-enable-which-key-integration))

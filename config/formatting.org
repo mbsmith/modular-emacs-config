@@ -35,6 +35,16 @@ Might as well highlight the parentheses to make them easier to spot.
   (prog-mode . highlight-parentheses-mode))
 #+end_src
 
+** Apheleia
+
+[[https://github.com/radian-software/apheleia][Aphelia]] tries to use the right formatting for any file and applies it asynchronously.
+
+#+BEGIN_SRC emacs-lisp
+(use-package apheleia
+  :config
+  (apheleia-global-mode +1))
+#+END_SRC
+
 ** Indentation Level
 
 #+begin_src emacs-lisp
