@@ -486,6 +486,18 @@ on a system by system basis.
 ;;;
 #+end_src
 
+For now I have org-social enabled by default.  It looks promising and doesn't add
+any substantial bloat so why not.
+
+#+BEGIN_SRC emacs-lisp
+(use-package org-social
+  :ensure t
+  :config
+  (setq org-social-file "~/repos/xulfer.srht.site/social.org"
+        org-social-relay "https://relay.org-social.org"
+        org-social-my-public-url "https://xulfer.srht.site/social.org"))
+#+END_SRC
+
 * Modal Editing
 
 I like using =vi= inspired modal editing.  For a while I tried project evil, but
@@ -1474,6 +1486,7 @@ forge support really.
 #+begin_src emacs-lisp
 (use-package magit
   :defer t
+  :bind (("C-c M" . magit-dispatch))
   :custom
   (magit-repository-directories (list (cons elpaca-repos-directory 1)))
   (magit-diff-refine-hunk 'all)

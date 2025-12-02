@@ -7,6 +7,7 @@ forge support really.
 #+begin_src emacs-lisp
 (use-package magit
   :defer t
+  :bind (("C-c M" . magit-dispatch))
   :custom
   (magit-repository-directories (list (cons elpaca-repos-directory 1)))
   (magit-diff-refine-hunk 'all)
