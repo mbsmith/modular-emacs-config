@@ -73,6 +73,7 @@ warnings.
 (setq native-comp-async-report-warnings-errors nil)
 (setenv "LSP_USE_PLISTS" "true")
 (setq lsp-use-plists t)
+(setq read-process-output-max (* 1024 1024)) ;; 1MB
 #+end_src
 
 ** Appearance
@@ -1455,10 +1456,7 @@ the future.
   :ensure (:host github 
                  :repo "sellout/emacs-color-theme-solarized"
                  :files ("*.el"))
-  :no-require t
-  :init
-  (customize-set-variable 'frame-background-mode 'light)
-  (load-theme 'solarized t))
+  :no-require t)
 #+end_src
 
 I like using catppuccin from time to time as well.
@@ -1563,8 +1561,7 @@ needed.
   (global-treesit-auto-mode))
 
 (use-package treesit-fold
-  :ensure t
-  :defer t)
+  :ensure t)
 #+end_src
 
 * Major Modes
@@ -1595,13 +1592,19 @@ bother with an explanation on each.
 (use-package rainbow-mode
   :commands (rainbow-mode))
 
+;; C
+(use-feature c-ts-mode
+  :config
+  (with-eval-after-load 'c-ts-mode
+    (setq-local treesit-primary-parser 'c)))
+
 ;; Clojure
 (use-package clojure-ts-mode
   :ensure t
+  :after (rainbox-mode)
   :hook
   ((clojure-ts-mode . cider-mode)
-   (clojure-ts-mode . rainbow-delimiters-mode)
-   (clojure-ts-mode . clj-refactor-mode)))
+   (clojure-ts-mode . rainbow-delimiters-mode)))
 
 ;; Gleam
 (use-package gleam-ts-mode

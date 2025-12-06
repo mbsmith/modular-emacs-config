@@ -18,7 +18,6 @@ needed.
   (global-treesit-auto-mode))
 
 (use-package treesit-fold
-  :ensure t
-  :defer t)
+  :ensure t)
 #+end_src
 

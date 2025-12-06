@@ -26,13 +26,19 @@ bother with an explanation on each.
 (use-package rainbow-mode
   :commands (rainbow-mode))
 
+;; C
+(use-feature c-ts-mode
+  :config
+  (with-eval-after-load 'c-ts-mode
+    (setq-local treesit-primary-parser 'c)))
+
 ;; Clojure
 (use-package clojure-ts-mode
   :ensure t
+  :after (rainbox-mode)
   :hook
   ((clojure-ts-mode . cider-mode)
-   (clojure-ts-mode . rainbow-delimiters-mode)
-   (clojure-ts-mode . clj-refactor-mode)))
+   (clojure-ts-mode . rainbow-delimiters-mode)))
 
 ;; Gleam
 (use-package gleam-ts-mode

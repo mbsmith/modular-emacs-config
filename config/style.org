@@ -14,10 +14,7 @@ the future.
   :ensure (:host github 
                  :repo "sellout/emacs-color-theme-solarized"
                  :files ("*.el"))
-  :no-require t
-  :init
-  (customize-set-variable 'frame-background-mode 'light)
-  (load-theme 'solarized t))
+  :no-require t)
 #+end_src
 
 I like using catppuccin from time to time as well.
