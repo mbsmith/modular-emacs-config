@@ -1539,6 +1539,14 @@ the package.
 
 ;; optionally
 (use-package lsp-ui :commands lsp-ui-mode)
+
+;; based-pyright
+(use-package lsp-pyright
+  :ensure t
+  :custom (lsp-pyright-langserver-command "basedpyright")
+  :hook (python-mode . (lambda ()
+                         (require 'lsp-pyright)
+                         (lsp-deferred))))
 #+end_src
 
 * Tree Sitter
